@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
         TextView displayQuery = findViewById(R.id.query);
 
         try {
-            String text = getString(R.string.table_contains) + cursor.getCount() + getString(R.string.rows);
+            String table_contains = getString(R.string.table_contains) + cursor.getCount() + getString(R.string.rows);
             String columnNames = StoreEntry._ID + getString(R.string.minus) +
                     StoreEntry.COLUMN_PRODUCT_NAME + getString(R.string.minus) +
                     StoreEntry.COLUMN_PRODUCT_PRICE + getString(R.string.minus) +
                     StoreEntry.COLUMN_PRODUCT_QUANTITY + getString(R.string.minus) +
                     StoreEntry.COLUMN_SUPPLIER_NAME + getString(R.string.minus) +
                     StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER;
-            displayInsertedRows.setText(text);
+            displayInsertedRows.setText(table_contains);
             displayQuery.setText(columnNames);
 
             int idColumnIndex = cursor.getColumnIndex(StoreEntry._ID);
