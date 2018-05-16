@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Inventory_App</string>
+    <string name="dummy_data">Insert dummy data</string>
+    <string name="minus">\u0020-\u0020</string>
+    <string name="tag_main_activity">Main Activity</string>
+    <string name="dummy_name">Royals</string>
+    <string name="dummy_price">100</string>
+    <string name="dummy_quantity">5</string>
+    <string name="dummy_supplier_name">Pearson</string>
+    <string name="dummy_supplier_phone_number">+583995797604</string>
+    <string name="new_row_id">New row ID:\u0020</string>
+    <string name="table_contains"> The product table contains\u0020</string>
+    <string name="rows">\u0020rows.</string>
 </resources>
