@@ -5,7 +5,7 @@ In this project I designed and created the structure of a Inventory App that wil
 of its inventory of products. The app will need to store information about the product and allow the user to track 
 sales and shipments and make it easy for the user to order more from the listed supplier. I put together my knowledge of app planning, navigating between multiple activities, databases, networking, and UI development into one app.
 
-## **First stage of the app:**
+## **First stage of the app**
 
 In Stage 1 I designed and implemented the backend database that stores information about the products and suppliers.
 
@@ -15,7 +15,7 @@ This project is about combining various ideas and skills we’ve been practicing
 - Modifying the entries
 - Displaying the contents of the table to users
 
-## **Second stage of the app:**
+## **Second stage of the app**
 
 In Stage 2 I built out the app UI for users to add and remove inventory.
 
