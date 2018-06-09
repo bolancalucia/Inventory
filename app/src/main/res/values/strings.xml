@@ -11,4 +11,8 @@
     <string name="new_row_id">New row ID:\u0020</string>
     <string name="table_contains"> The product table contains\u0020</string>
     <string name="rows">\u0020rows.</string>
+    <string name="inventory">Inventory</string>
+    <string name="delete_all_entries">Delete all entries</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>
