@@ -10,7 +10,7 @@ public class StoreDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "Store.db";
     public static final int DATABASE_VERSION = 1;
-    public static final String SQL_CREATE_PRODUCT_TABLE = "CREATE TABLE " + StoreEntry.TABLE_NAME + "("
+    public static final String SQL_CREATE_PRODUCTS_TABLE = "CREATE TABLE " + StoreEntry.TABLE_NAME + "("
             + StoreEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + StoreEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL,"
             + StoreEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL,"
@@ -24,7 +24,7 @@ public class StoreDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_PRODUCT_TABLE);
+        db.execSQL(SQL_CREATE_PRODUCTS_TABLE);
     }
 
     @Override
