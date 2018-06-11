@@ -33,7 +33,7 @@ public class StoreCursorAdapter extends CursorAdapter{
         Integer productQuantity = cursor.getInt(cursor.getColumnIndex(StoreEntry.COLUMN_PRODUCT_QUANTITY));
 
         textViewName.setText(productName);
-        textViewPrice.setText(productPrice);
-        textViewQuantity.setText(productQuantity);
+        textViewPrice.setText(productPrice.toString());
+        textViewQuantity.setText(productQuantity.toString());
     }
 }

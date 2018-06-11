@@ -26,6 +26,7 @@ import com.example.android.inventory_app.StoreContract.StoreEntry;
 
 public class ProductActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    public static final String LOG_TAG = ProductActivity.class.getSimpleName();
     private static final int EXISTING_PRODUCT_LOADER = 0;
 
     private EditText mProductNameEditText;
@@ -74,13 +75,14 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         mDecrementQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                decrementQuantity();
             }
         });
 
         mIncrementQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                incrementQuantity();
             }
         });
     }
@@ -209,6 +211,31 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         mSupplierPhoneNumberEditText.setText("");
     }
 
+    private void decrementQuantity() {
+        String currentValue = mProductQuantityEditText.getText().toString();
+        int current;
+        if(currentValue.isEmpty()) {
+            return;
+        } else if(currentValue.equals("0")) {
+            return;
+        } else {
+            current = Integer.parseInt(currentValue);
+            mProductQuantityEditText.setText(String.valueOf(current - 1));
+        }
+    }
+
+    private void incrementQuantity() {
+        String currentValue = mProductQuantityEditText.getText().toString();
+        int current;
+        if(currentValue.isEmpty()) {
+            current = 0;
+        } else {
+            current = Integer.parseInt(currentValue);
+        }
+        mProductQuantityEditText.setText(String.valueOf(current + 1));
+
+    }
+
     private void deletePet() {
         if(mCurrentProductUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentProductUri, null, null);
@@ -228,22 +255,23 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         String productSupplierName = mSupplierNameEditText.getText().toString().trim();
         String productSupplierPhoneNumber = mSupplierPhoneNumberEditText.toString().trim();
 
-        if (TextUtils.isEmpty(productNameString) || TextUtils.isEmpty(productPriceString)
+        if (mCurrentProductUri == null && (TextUtils.isEmpty(productNameString) || TextUtils.isEmpty(productPriceString)
                 || TextUtils.isEmpty(productSupplierName)
-                || TextUtils.isEmpty(productSupplierPhoneNumber)) {
+                || TextUtils.isEmpty(productSupplierPhoneNumber))) {
             return;
         }
 
         ContentValues values = new ContentValues();
         values.put(StoreEntry.COLUMN_PRODUCT_NAME, productNameString);
-        values.put(StoreEntry.COLUMN_PRODUCT_PRICE, productPriceString);
-        values.put(StoreEntry.COLUMN_SUPPLIER_NAME, productSupplierName);
-        values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, productSupplierPhoneNumber);
+        int price = Integer.parseInt(productPriceString);
+        values.put(StoreEntry.COLUMN_PRODUCT_PRICE, price);
         int quantity = 0;
         if (!TextUtils.isEmpty(productQuantityString)) {
             quantity = Integer.parseInt(productQuantityString);
         }
         values.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+        values.put(StoreEntry.COLUMN_SUPPLIER_NAME, productSupplierName);
+        values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, productSupplierPhoneNumber);
 
         if (mCurrentProductUri == null) {
             Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
