@@ -36,6 +36,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     private EditText mSupplierPhoneNumberEditText;
     private Button mDecrementQuantityButton;
     private Button mIncrementQuantityButton;
+    private Button mContactSupplierButton;
     private Uri mCurrentProductUri;
     private boolean mProductHasChanged = false;
 
@@ -63,6 +64,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         mSupplierPhoneNumberEditText = findViewById(R.id.edit_supplier_phone_number);
         mDecrementQuantityButton = findViewById(R.id.minus_button);
         mIncrementQuantityButton = findViewById(R.id.plus_button);
+        mContactSupplierButton = findViewById(R.id.contact_supplier_button);
 
         mProductNameEditText.setOnTouchListener(mTouchListener);
         mProductPriceEditText.setOnTouchListener(mTouchListener);
@@ -83,6 +85,19 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
             @Override
             public void onClick(View v) {
                 incrementQuantity();
+            }
+        });
+
+        mContactSupplierButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNumber = mSupplierPhoneNumberEditText.getText().toString();
+                Intent contactSupplierIntent = new Intent();
+                contactSupplierIntent.setAction(Intent.ACTION_DIAL);
+                contactSupplierIntent.setData(Uri.parse("tel:" + phoneNumber));
+                if(contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(contactSupplierIntent);
+                }
             }
         });
     }
@@ -255,9 +270,17 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         String productSupplierName = mSupplierNameEditText.getText().toString().trim();
         String productSupplierPhoneNumber = mSupplierPhoneNumberEditText.toString().trim();
 
-        if (mCurrentProductUri == null && (TextUtils.isEmpty(productNameString) || TextUtils.isEmpty(productPriceString)
+        if (mCurrentProductUri == null && (TextUtils.isEmpty(productNameString)
+                || TextUtils.isEmpty(productPriceString)
                 || TextUtils.isEmpty(productSupplierName)
                 || TextUtils.isEmpty(productSupplierPhoneNumber))) {
+            Toast.makeText(this, R.string.product_activity_input_fields, Toast.LENGTH_SHORT).show();
+            return;
+        } else if(TextUtils.isEmpty(productNameString)
+                || TextUtils.isEmpty(productPriceString)
+                || TextUtils.isEmpty(productSupplierName)
+                || TextUtils.isEmpty(productSupplierPhoneNumber)){
+            Toast.makeText(this, R.string.product_activity_input_fields, Toast.LENGTH_SHORT).show();
             return;
         }
 

@@ -1,9 +1,11 @@
 package com.example.android.inventory_app;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        ListView listView = findViewById(R.id.list_view);
+        final ListView listView = findViewById(R.id.list_view);
         View emptyView = findViewById(R.id.empty_view);
         listView.setEmptyView(emptyView);
 
@@ -49,16 +51,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, final View view, int position, final long id) {
                 Intent updateProduct = new Intent(MainActivity.this, ProductActivity.class);
                 Uri currentProductUri = ContentUris.withAppendedId(StoreEntry.CONTENT_URI, id);
                 updateProduct.setData(currentProductUri);
                 startActivity(updateProduct);
             }
         });
-
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 insertProduct();
                 return true;
             case R.id.action_delete_all_entries:
-                deleteAllProducts();
+                showDeleteAllConfirmationDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -106,6 +108,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mCursorAdapter.swapCursor(null);
     }
 
+    private void deleteAllProducts() {
+        int rowsDeleted = getContentResolver().delete(StoreEntry.CONTENT_URI, null, null);
+        if(rowsDeleted == 0) {
+            Toast.makeText(this, getString(R.string.delete_all_products_unsuccessful), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, getString(R.string.delete_all_products_successful), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void insertProduct() {
         ContentValues values = new ContentValues();
         values.put(StoreEntry.COLUMN_PRODUCT_NAME, "Bajadera");
@@ -117,12 +128,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getContentResolver().insert(StoreEntry.CONTENT_URI, values);
     }
 
-    private void deleteAllProducts() {
-        int rowsDeleted = getContentResolver().delete(StoreEntry.CONTENT_URI, null, null);
-        if(rowsDeleted == 0) {
-            Toast.makeText(this, getString(R.string.delete_all_products_unsuccessful), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getString(R.string.delete_all_products_successful), Toast.LENGTH_SHORT).show();
-        }
+    private void showDeleteAllConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_all_dialog_msg);
+        builder.setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                deleteAllProducts();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

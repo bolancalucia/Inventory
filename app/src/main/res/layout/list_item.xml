@@ -20,8 +20,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#2B3D4D"
-            android:background="#981617"/>
+            android:textColor="#2B3D4D"/>
 
         <TextView
             android:id="@+id/price"
@@ -29,8 +28,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#AEB6BD"
-            android:background="#298456"/>
+            android:textColor="#AEB6BD"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -45,14 +43,14 @@
         android:id="@+id/quantity"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD"
-        android:background="#689111"/>
+        android:textColor="#AEB6BD"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button_sale"
         android:text="Sale"
-        android:focusable="false"/>
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
     </LinearLayout>
 </LinearLayout>

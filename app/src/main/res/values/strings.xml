@@ -29,7 +29,7 @@
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep editing</string>
-    <string name="delete_dialog_msg">Delete this product</string>
+    <string name="delete_dialog_msg">Delete this product?</string>
     <string name="cancel">Cancel</string>
     <string name="editor_insert_product_failed">Error with saving product</string>
     <string name="editor_insert_product_successful">Product saved</string>
@@ -37,4 +37,8 @@
     <string name="editor_update_product_successful">Product updated</string>
     <string name="delete_all_products_unsuccessful">Error with deleting all products</string>
     <string name="delete_all_products_successful">All products deleted</string>
+    <string name="proceed">Proceed</string>
+    <string name="delete_all_dialog_msg">Delete all products?</string>
+    <string name="product_activity_input_fields">All fields must be filled</string>
+    <string name="contact_supplier_button">Contact supplier</string>
 </resources>
