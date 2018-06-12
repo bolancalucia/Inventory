@@ -50,7 +50,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/button_sale"
         android:text="Sale"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusable="false"/>
     </LinearLayout>
 </LinearLayout>

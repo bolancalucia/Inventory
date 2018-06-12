@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        final ListView listView = findViewById(R.id.list_view);
+        ListView listView = findViewById(R.id.list_view);
         View emptyView = findViewById(R.id.empty_view);
         listView.setEmptyView(emptyView);
 
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_store, menu);
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_insert_dummy_data:
-                insertProduct();
+                insertExampleProduct();
                 return true;
             case R.id.action_delete_all_entries:
                 showDeleteAllConfirmationDialog();
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-    private void insertProduct() {
+    private void insertExampleProduct() {
         ContentValues values = new ContentValues();
         values.put(StoreEntry.COLUMN_PRODUCT_NAME, "Bajadera");
         values.put(StoreEntry.COLUMN_PRODUCT_PRICE, 100);

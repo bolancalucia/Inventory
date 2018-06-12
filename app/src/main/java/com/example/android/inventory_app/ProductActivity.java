@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -88,18 +89,22 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
-        mContactSupplierButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String phoneNumber = mSupplierPhoneNumberEditText.getText().toString();
-                Intent contactSupplierIntent = new Intent();
-                contactSupplierIntent.setAction(Intent.ACTION_DIAL);
-                contactSupplierIntent.setData(Uri.parse("tel:" + phoneNumber));
-                if(contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(contactSupplierIntent);
+        if(mCurrentProductUri == null) {
+            mContactSupplierButton.setVisibility(View.INVISIBLE);
+        } else {
+            mContactSupplierButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String phoneNumber = mSupplierPhoneNumberEditText.getText().toString();
+                    Intent contactSupplierIntent = new Intent();
+                    contactSupplierIntent.setAction(Intent.ACTION_DIAL);
+                    contactSupplierIntent.setData(Uri.parse("tel:" + phoneNumber));
+                    if (contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(contactSupplierIntent);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -268,7 +273,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         String productPriceString = mProductPriceEditText.getText().toString().trim();
         String productQuantityString = mProductQuantityEditText.getText().toString().trim();
         String productSupplierName = mSupplierNameEditText.getText().toString().trim();
-        String productSupplierPhoneNumber = mSupplierPhoneNumberEditText.toString().trim();
+        String productSupplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
 
         if (mCurrentProductUri == null && (TextUtils.isEmpty(productNameString)
                 || TextUtils.isEmpty(productPriceString)
