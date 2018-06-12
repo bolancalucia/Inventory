@@ -27,10 +27,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/empty_store_text"
             android:layout_below="@id/empty_store_image"
-            android:layout_centerHorizontal="true"
             android:paddingTop="16dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Your inventory is empty.\nStart adding products."
+            android:text="@string/empty_inventory"
             android:textAppearance="?android:textAppearanceMedium"/>
     </RelativeLayout>
 

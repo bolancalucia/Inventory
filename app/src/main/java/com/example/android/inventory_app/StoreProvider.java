@@ -51,7 +51,7 @@ public class StoreProvider extends ContentProvider {
                 cursor = database.query(StoreEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException(String.format("Cannot query unknown URI %s", uri));
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -67,7 +67,7 @@ public class StoreProvider extends ContentProvider {
             case PRODUCT_ID:
                 return StoreEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalStateException("Unknown URI " + uri + "with match " + match);
+                throw new IllegalStateException(String.format("Unknown URI %s with match %d", uri, match));
         }
     }
 
@@ -79,7 +79,7 @@ public class StoreProvider extends ContentProvider {
             case PRODUCTS:
                 return insertProduct(uri, values);
             default:
-                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+                throw new IllegalArgumentException(String.format("Insertion is not supported for %s", uri));
         }
     }
 
@@ -99,7 +99,7 @@ public class StoreProvider extends ContentProvider {
                 rowsDeleted = database.delete(StoreEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalArgumentException(String.format("Deletion is not supported for %s", uri));
         }
 
         if(rowsDeleted != 0) {
@@ -119,7 +119,7 @@ public class StoreProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateProduct(uri, values, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+                throw new IllegalArgumentException(String.format("Update is not supported for %s", uri));
         }
     }
 
@@ -152,7 +152,7 @@ public class StoreProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         long id = database.insert(StoreEntry.TABLE_NAME, null, values);
         if(id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            Log.e(LOG_TAG, String.format("Failed to insert row for %s", uri));
             return null;
         }
 

@@ -39,7 +39,20 @@
     <string name="delete_all_products_successful">All products deleted</string>
     <string name="proceed">Proceed</string>
     <string name="delete_all_dialog_msg">Delete all products?</string>
-    <string name="product_activity_input_fields">All fields must be filled</string>
+    <string name="product_activity_input_fields">All fields must be correctly filled</string>
     <string name="contact_supplier_button">Contact supplier</string>
     <string name="product_out_of_stock">This product is out of stock!</string>
+    <string name="sell_button">Sell button</string>
+    <string name="empty_inventory">Your inventory is empty.\nStart adding products.</string>
+    <string name="display_price">Price: %s €</string>
+    <string name="display_quantity">In stock: %s</string>
+    <string name="add_a_product_activity_title">Add a Product</string>
+    <string name="edit_product_activity_title">Edit Product</string>
+    <string name="empty_string" />
+    <string name="phone_number_intent_data">tel:%s</string>
+    <string name="zero">0</string>
+    <string name="missing_field_for_product">Missing field %s</string>
+    <string name="delete_product_successful">Product deleted</string>
+    <string name="delete_product_unsuccessful">Error with deleting product</string>
+    <string name="product_price_equals_zero">Price should be different than 0</string>
 </resources>

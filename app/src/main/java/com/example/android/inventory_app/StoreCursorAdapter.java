@@ -44,8 +44,8 @@ public class StoreCursorAdapter extends CursorAdapter{
         Integer productPrice = cursor.getInt(productPriceColumnIndex);
         final Integer productQuantity = cursor.getInt(productQuantityColumnIndex);
 
-        String productPriceText = String.format("Price: %s €", productPrice.toString());
-        String productQuantityText = String.format("In stock: %s", productQuantity.toString());
+        String productPriceText = String.format(context.getString(R.string.display_price), productPrice.toString());
+        String productQuantityText = String.format(context.getString(R.string.display_quantity), productQuantity.toString());
 
         textViewName.setText(productName);
         textViewPrice.setText(productPriceText);

@@ -95,12 +95,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
                 @Override
                 public void onClick(View v) {
                     String phoneNumber = mSupplierPhoneNumberEditText.getText().toString();
-                    Intent contactSupplierIntent = new Intent();
-                    contactSupplierIntent.setAction(Intent.ACTION_DIAL);
-                    contactSupplierIntent.setData(Uri.parse("tel:" + phoneNumber));
-                    if (contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(contactSupplierIntent);
-                    }
+                    orderProductBySupplierPhone(phoneNumber);
                 }
             });
         }
@@ -110,10 +105,10 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_product, menu);
         if(mCurrentProductUri == null) {
-            setTitle("Add a Product");
+            setTitle(getString(R.string.add_a_product_activity_title));
             invalidateOptionsMenu();
         } else {
-            setTitle("Edit Product");
+            setTitle(getString(R.string.edit_product_activity_title));
         }
         return true;
     }
@@ -132,7 +127,9 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                saveProduct();
+                if(!saveProduct()) {
+                    return true;
+                }
                 finish();
                 return true;
             case R.id.action_delete:
@@ -150,7 +147,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
                         NavUtils.navigateUpFromSameTask(ProductActivity.this);
                     }
                 };
-                showUnsavedChangesDialog(discardButtonClickListener);
+                showUnsavedChangesConfirmationDialog(discardButtonClickListener);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -169,7 +166,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
                 finish();
             }
         };
-        showUnsavedChangesDialog(discardButtonClickListener);
+        showUnsavedChangesConfirmationDialog(discardButtonClickListener);
     }
 
     @Override
@@ -223,11 +220,11 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mProductNameEditText.setText("");
-        mProductPriceEditText.setText("");
-        mProductQuantityEditText.setText("");
-        mSupplierNameEditText.setText("");
-        mSupplierPhoneNumberEditText.setText("");
+        mProductNameEditText.setText(R.string.empty_string);
+        mProductPriceEditText.setText(R.string.empty_string);
+        mProductQuantityEditText.setText(R.string.empty_string);
+        mSupplierNameEditText.setText(R.string.empty_string);
+        mSupplierPhoneNumberEditText.setText(R.string.empty_string);
     }
 
     private void decrementQuantity() {
@@ -235,11 +232,24 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         int current;
         if(currentValue.isEmpty()) {
             return;
-        } else if(currentValue.equals("0")) {
+        } else if(currentValue.equals(getString(R.string.zero))) {
             return;
         } else {
             current = Integer.parseInt(currentValue);
             mProductQuantityEditText.setText(String.valueOf(current - 1));
+        }
+    }
+
+    private void orderProductBySupplierEmail() {
+
+    }
+
+    private void orderProductBySupplierPhone(String phoneNumber) {
+        Intent contactSupplierIntent = new Intent();
+        contactSupplierIntent.setAction(Intent.ACTION_DIAL);
+        contactSupplierIntent.setData(Uri.parse(String.format(getString(R.string.phone_number_intent_data), phoneNumber)));
+        if (contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(contactSupplierIntent);
         }
     }
 
@@ -259,43 +269,67 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         if(mCurrentProductUri != null) {
             int rowsDeleted = getContentResolver().delete(mCurrentProductUri, null, null);
             if(rowsDeleted == 0) {
-                Toast.makeText(this, "Error with deleting product", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.delete_product_unsuccessful, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Product deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.delete_product_successful, Toast.LENGTH_SHORT).show();
             }
             finish();
         }
     }
 
-    private void saveProduct() {
+    private boolean checkIfValueSet(EditText text, String description) {
+        if(TextUtils.isEmpty(text.getText())) {
+            text.setError(String.format(getString(R.string.missing_field_for_product), description));
+            return false;
+        } else {
+            text.setError(null);
+            return true;
+        }
+    }
+
+    private boolean saveProduct() {
+        boolean isFilled = true;
+        int quantity;
+        Integer productPrice;
+
         String productNameString = mProductNameEditText.getText().toString().trim();
         String productPriceString = mProductPriceEditText.getText().toString().trim();
         String productQuantityString = mProductQuantityEditText.getText().toString().trim();
         String productSupplierName = mSupplierNameEditText.getText().toString().trim();
         String productSupplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
 
-        if (mCurrentProductUri == null && (TextUtils.isEmpty(productNameString)
-                || TextUtils.isEmpty(productPriceString)
-                || TextUtils.isEmpty(productSupplierName)
-                || TextUtils.isEmpty(productSupplierPhoneNumber))) {
+        if (!checkIfValueSet(mProductNameEditText, StoreEntry.COLUMN_PRODUCT_NAME)) {
+            isFilled = false;
+        }
+        if (!checkIfValueSet(mProductPriceEditText, StoreEntry.COLUMN_PRODUCT_PRICE)) {
+            isFilled = false;
+        } else {
+            productPrice = Integer.parseInt(productPriceString);
+            if (productPrice == 0) {
+                mProductPriceEditText.setError(getString(R.string.product_price_equals_zero));
+                isFilled = false;
+            }
+        }
+        if (TextUtils.isEmpty(productQuantityString)) {
+            productQuantityString = getString(R.string.zero);
+        }
+        if (!checkIfValueSet(mSupplierNameEditText, StoreEntry.COLUMN_SUPPLIER_NAME)) {
+            isFilled = false;
+        }
+        if (!checkIfValueSet(mSupplierPhoneNumberEditText, StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
+            isFilled = false;
+        }
+
+        if (!isFilled) {
             Toast.makeText(this, R.string.product_activity_input_fields, Toast.LENGTH_SHORT).show();
-            return;
-        } else if(TextUtils.isEmpty(productNameString)
-                || TextUtils.isEmpty(productPriceString)
-                || TextUtils.isEmpty(productSupplierName)
-                || TextUtils.isEmpty(productSupplierPhoneNumber)){
-            Toast.makeText(this, R.string.product_activity_input_fields, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
 
         ContentValues values = new ContentValues();
         values.put(StoreEntry.COLUMN_PRODUCT_NAME, productNameString);
         int price = Integer.parseInt(productPriceString);
         values.put(StoreEntry.COLUMN_PRODUCT_PRICE, price);
-        int quantity = 0;
-        if (!TextUtils.isEmpty(productQuantityString)) {
-            quantity = Integer.parseInt(productQuantityString);
-        }
+        quantity = Integer.parseInt(productQuantityString);
         values.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(StoreEntry.COLUMN_SUPPLIER_NAME, productSupplierName);
         values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, productSupplierPhoneNumber);
@@ -308,16 +342,17 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
                 Toast.makeText(this, getString(R.string.editor_insert_product_successful), Toast.LENGTH_SHORT).show();
             }
         } else {
-            int rowsUpdated = getContentResolver().update(mCurrentProductUri, values, null,null);
+            int rowsUpdated = getContentResolver().update(mCurrentProductUri, values, null, null);
             if (rowsUpdated == 0) {
                 Toast.makeText(this, getString(R.string.editor_update_product_failed), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, getString(R.string.editor_update_product_successful), Toast.LENGTH_SHORT).show();
             }
         }
+        return true;
     }
 
-    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
+    private void showUnsavedChangesConfirmationDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
@@ -337,7 +372,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 deletePet();
             }

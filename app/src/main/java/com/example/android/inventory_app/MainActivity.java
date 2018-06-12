@@ -118,11 +118,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void insertExampleProduct() {
         ContentValues values = new ContentValues();
-        values.put(StoreEntry.COLUMN_PRODUCT_NAME, "Bajadera");
-        values.put(StoreEntry.COLUMN_PRODUCT_PRICE, 100);
-        values.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, 5);
-        values.put(StoreEntry.COLUMN_SUPPLIER_NAME, "Kraš");
-        values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, "021383141");
+        values.put(StoreEntry.COLUMN_PRODUCT_NAME, getString(R.string.dummy_name));
+        values.put(StoreEntry.COLUMN_PRODUCT_PRICE, getString(R.string.dummy_price));
+        values.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, getString(R.string.dummy_quantity));
+        values.put(StoreEntry.COLUMN_SUPPLIER_NAME, getString(R.string.dummy_supplier_name));
+        values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.dummy_supplier_phone_number));
 
         getContentResolver().insert(StoreEntry.CONTENT_URI, values);
     }
