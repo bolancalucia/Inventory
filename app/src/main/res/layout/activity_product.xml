@@ -113,12 +113,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/contact_supplier_button"
         android:id="@+id/contact_supplier_button"
         style="@style/ProductEditorFieldStyle"
         android:layout_margin="16dp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_call"/>
 </LinearLayout>

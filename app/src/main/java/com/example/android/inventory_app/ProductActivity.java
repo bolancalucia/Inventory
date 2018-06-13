@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.android.inventory_app.StoreContract.StoreEntry;
@@ -36,7 +37,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     private EditText mSupplierPhoneNumberEditText;
     private Button mDecrementQuantityButton;
     private Button mIncrementQuantityButton;
-    private Button mContactSupplierButton;
+    private ImageButton mContactSupplierButton;
     private Uri mCurrentProductUri;
     private boolean mProductHasChanged = false;
 
