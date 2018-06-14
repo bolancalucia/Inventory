@@ -16,7 +16,8 @@ public class StoreDbHelper extends SQLiteOpenHelper {
             + StoreEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL,"
             + StoreEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0,"
             + StoreEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL,"
-            + StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL);";
+            + StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL,"
+            + StoreEntry.COLUMN_SUPPLIER_EMAIL + " TEXT NOT NULL);";
 
     public StoreDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

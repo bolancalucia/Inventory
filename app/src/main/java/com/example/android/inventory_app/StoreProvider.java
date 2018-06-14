@@ -149,6 +149,11 @@ public class StoreProvider extends ContentProvider {
             throw new IllegalArgumentException("Product requires supplier phone number");
         }
 
+        String supplier_email = values.getAsString(StoreEntry.COLUMN_SUPPLIER_EMAIL);
+        if(supplier_email == null) {
+            throw new IllegalArgumentException("Product requires supplier email");
+        }
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         long id = database.insert(StoreEntry.TABLE_NAME, null, values);
         if(id == -1) {
@@ -193,6 +198,13 @@ public class StoreProvider extends ContentProvider {
             String supplier_phone_number = values.getAsString(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
             if(supplier_phone_number == null) {
                 throw new IllegalArgumentException("Product requires supplier phone number");
+            }
+        }
+
+        if(values.containsKey(StoreEntry.COLUMN_SUPPLIER_EMAIL)) {
+            String supplier_email = values.getAsString(StoreEntry.COLUMN_SUPPLIER_EMAIL);
+            if(supplier_email == null) {
+                throw new IllegalArgumentException("Product requires supplier email");
             }
         }
 

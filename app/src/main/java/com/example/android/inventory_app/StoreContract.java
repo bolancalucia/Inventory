@@ -26,5 +26,6 @@ public final class StoreContract {
         public static final String COLUMN_PRODUCT_QUANTITY = "quantity";
         public static final String COLUMN_SUPPLIER_NAME = "supplier";
         public static final String COLUMN_SUPPLIER_PHONE_NUMBER = "supplier_phone";
+        public static final String COLUMN_SUPPLIER_EMAIL = "supplier_email";
     }
 }

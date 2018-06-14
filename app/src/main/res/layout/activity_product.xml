@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,42 +13,42 @@
         android:orientation="horizontal">
 
         <TextView
-            android:text="@string/product"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="@string/product" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:orientation="vertical"
             android:paddingLeft="4dp"
-            android:paddingStart="4dp"
-            android:orientation="vertical">
+            android:paddingStart="4dp">
 
             <EditText
                 android:id="@+id/edit_product_name"
+                style="@style/ProductEditorFieldStyle"
                 android:hint="@string/hint_product_name"
-                android:inputType="textCapWords"
-                style="@style/ProductEditorFieldStyle" />
+                android:inputType="textCapWords" />
 
             <RelativeLayout
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingLeft="4dp"
                 android:paddingStart="4dp">
 
                 <EditText
                     android:id="@+id/edit_product_price"
+                    style="@style/ProductEditorFieldStyle"
                     android:hint="@string/hint_product_price"
-                    android:inputType="number"
-                    style="@style/ProductEditorFieldStyle" />
+                    android:inputType="number" />
 
                 <TextView
                     android:id="@+id/label_price_unit"
+                    style="@style/ProductEditorUnitsStyle"
+                    android:gravity="end"
                     android:hint="@string/hint_product_price_unit"
                     android:text="@string/product_price_unit"
-                    android:textAlignment="textEnd"
-                    style="@style/ProductEditorUnitsStyle"
-                    android:gravity="end" />
+                    android:textAlignment="textEnd" />
             </RelativeLayout>
 
             <LinearLayout
@@ -59,25 +58,25 @@
                 android:paddingStart="4dp">
 
                 <Button
-                    android:layout_width="0dp"
-                    android:layout_weight="0.6"
-                    android:layout_height="wrap_content"
                     android:id="@+id/minus_button"
-                    android:text="@string/minus_button"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
+                    android:text="@string/minus_button" />
 
                 <EditText
                     android:id="@+id/edit_product_quantity"
+                    style="@style/ProductEditorFieldStyle"
                     android:layout_weight="1"
                     android:hint="@string/hint_product_quantity"
-                    android:inputType="number"
-                    style="@style/ProductEditorFieldStyle"/>
+                    android:inputType="number" />
 
                 <Button
-                    android:layout_weight="0.6"
+                    android:id="@+id/plus_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/plus_button"
-                    android:text="@string/plus_button"/>
+                    android:layout_weight="0.6"
+                    android:text="@string/plus_button" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -110,16 +109,44 @@
                 style="@style/ProductEditorFieldStyle"
                 android:hint="@string/hint_supplier_phone_number"
                 android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/edit_supplier_email"
+                style="@style/ProductEditorFieldStyle"
+                android:hint="@string/hint_supplier_email"
+                android:inputType="textEmailAddress"/>
         </LinearLayout>
     </LinearLayout>
 
-    <ImageButton
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/contact_supplier_button"
-        android:id="@+id/contact_supplier_button"
-        style="@style/ProductEditorFieldStyle"
-        android:layout_margin="16dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_call"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/contact_supplier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:paddingEnd="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:text="@string/contact_supplier"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/colorAccent" />
+
+        <ImageButton
+            android:id="@+id/call_supplier_button"
+            android:contentDescription="@string/suppliers_email"
+            android:src="@drawable/ic_call"
+            android:text="@string/call_supplier_button"
+            style="@style/contact_supplier_button" />
+
+        <ImageButton
+            android:id="@+id/email_supplier_button"
+            android:contentDescription="@string/suppliers_phone_number"
+            android:src="@drawable/ic_mail"
+            android:text="@string/email_supplier_button"
+            style="@style/contact_supplier_button" />
+    </LinearLayout>
 </LinearLayout>

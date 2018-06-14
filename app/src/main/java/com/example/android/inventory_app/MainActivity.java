@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, getString(R.string.dummy_quantity));
         values.put(StoreEntry.COLUMN_SUPPLIER_NAME, getString(R.string.dummy_supplier_name));
         values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.dummy_supplier_phone_number));
+        values.put(StoreEntry.COLUMN_SUPPLIER_EMAIL, getString(R.string.dummy_supplier_email));
 
         getContentResolver().insert(StoreEntry.CONTENT_URI, values);
     }

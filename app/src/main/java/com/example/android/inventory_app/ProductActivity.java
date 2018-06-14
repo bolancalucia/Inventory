@@ -21,13 +21,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventory_app.StoreContract.StoreEntry;
 
 public class ProductActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
-
-    public static final String LOG_TAG = ProductActivity.class.getSimpleName();
     private static final int EXISTING_PRODUCT_LOADER = 0;
 
     private EditText mProductNameEditText;
@@ -35,9 +34,12 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     private EditText mProductQuantityEditText;
     private EditText mSupplierNameEditText;
     private EditText mSupplierPhoneNumberEditText;
+    private EditText mSupplierEmailEditText;
     private Button mDecrementQuantityButton;
     private Button mIncrementQuantityButton;
-    private ImageButton mContactSupplierButton;
+    private ImageButton mCallSupplierButton;
+    private ImageButton mEmailSupplierButton;
+    private TextView mContactSupplier;
     private Uri mCurrentProductUri;
     private boolean mProductHasChanged = false;
 
@@ -63,15 +65,19 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         mProductQuantityEditText = findViewById(R.id.edit_product_quantity);
         mSupplierNameEditText = findViewById(R.id.edit_supplier_name);
         mSupplierPhoneNumberEditText = findViewById(R.id.edit_supplier_phone_number);
+        mSupplierEmailEditText = findViewById(R.id.edit_supplier_email);
         mDecrementQuantityButton = findViewById(R.id.minus_button);
         mIncrementQuantityButton = findViewById(R.id.plus_button);
-        mContactSupplierButton = findViewById(R.id.contact_supplier_button);
+        mCallSupplierButton = findViewById(R.id.call_supplier_button);
+        mEmailSupplierButton = findViewById(R.id.email_supplier_button);
+        mContactSupplier = findViewById(R.id.contact_supplier);
 
         mProductNameEditText.setOnTouchListener(mTouchListener);
         mProductPriceEditText.setOnTouchListener(mTouchListener);
         mProductQuantityEditText.setOnTouchListener(mTouchListener);
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
+        mSupplierEmailEditText.setOnTouchListener(mTouchListener);
         mDecrementQuantityButton.setOnTouchListener(mTouchListener);
         mIncrementQuantityButton.setOnTouchListener(mTouchListener);
 
@@ -90,13 +96,24 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         });
 
         if(mCurrentProductUri == null) {
-            mContactSupplierButton.setVisibility(View.INVISIBLE);
+            mContactSupplier.setVisibility(View.INVISIBLE);
+            mCallSupplierButton.setVisibility(View.INVISIBLE);
+            mEmailSupplierButton.setVisibility(View.INVISIBLE);
         } else {
-            mContactSupplierButton.setOnClickListener(new View.OnClickListener() {
+            mCallSupplierButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String phoneNumber = mSupplierPhoneNumberEditText.getText().toString();
                     orderProductBySupplierPhone(phoneNumber);
+                }
+            });
+
+            mEmailSupplierButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String email = mSupplierEmailEditText.getText().toString();
+                    String productName = mProductNameEditText.getText().toString();
+                    orderProductBySupplierEmail(email, productName);
                 }
             });
         }
@@ -181,7 +198,8 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
                 StoreEntry.COLUMN_PRODUCT_PRICE,
                 StoreEntry.COLUMN_PRODUCT_QUANTITY,
                 StoreEntry.COLUMN_SUPPLIER_NAME,
-                StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER
+                StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER,
+                StoreEntry.COLUMN_SUPPLIER_EMAIL
         };
 
         return new CursorLoader(this,
@@ -204,18 +222,21 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
             int productQuantityColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_PRODUCT_QUANTITY);
             int supplierNameColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_NAME);
             int supplierPhoneNumberColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            int supplierEmailColumnIndex = cursor.getColumnIndex(StoreEntry.COLUMN_SUPPLIER_EMAIL);
 
             String name = cursor.getString(productNameColumnIndex);
             int price = cursor.getInt(productPriceColumnIndex);
             int quantity = cursor.getInt(productQuantityColumnIndex);
             String supplier_name = cursor.getString(supplierNameColumnIndex);
             String supplier_phone_number = cursor.getString(supplierPhoneNumberColumnIndex);
+            String supplier_email = cursor.getString(supplierEmailColumnIndex);
 
             mProductNameEditText.setText(name);
             mProductPriceEditText.setText(Integer.toString(price));
             mProductQuantityEditText.setText(Integer.toString(quantity));
             mSupplierNameEditText.setText(supplier_name);
             mSupplierPhoneNumberEditText.setText(supplier_phone_number);
+            mSupplierEmailEditText.setText(supplier_email);
         }
     }
 
@@ -226,6 +247,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         mProductQuantityEditText.setText(R.string.empty_string);
         mSupplierNameEditText.setText(R.string.empty_string);
         mSupplierPhoneNumberEditText.setText(R.string.empty_string);
+        mSupplierEmailEditText.setText(R.string.empty_string);
     }
 
     private void decrementQuantity() {
@@ -241,19 +263,6 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         }
     }
 
-    private void orderProductBySupplierEmail() {
-
-    }
-
-    private void orderProductBySupplierPhone(String phoneNumber) {
-        Intent contactSupplierIntent = new Intent();
-        contactSupplierIntent.setAction(Intent.ACTION_DIAL);
-        contactSupplierIntent.setData(Uri.parse(String.format(getString(R.string.phone_number_intent_data), phoneNumber)));
-        if (contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(contactSupplierIntent);
-        }
-    }
-
     private void incrementQuantity() {
         String currentValue = mProductQuantityEditText.getText().toString();
         int current;
@@ -264,6 +273,27 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         }
         mProductQuantityEditText.setText(String.valueOf(current + 1));
 
+    }
+
+    private void orderProductBySupplierEmail(String email, String productName) {
+        Intent contactSupplierIntent = new Intent();
+        contactSupplierIntent.setAction(Intent.ACTION_SENDTO);
+        contactSupplierIntent.setData(Uri.parse(String.format(getString(R.string.mail_intent_data), email)));
+        contactSupplierIntent.putExtra(Intent.EXTRA_EMAIL, email);
+        contactSupplierIntent.putExtra(Intent.EXTRA_SUBJECT, String.format(getString(R.string.email_intent_data), productName));
+        contactSupplierIntent.putExtra(Intent.EXTRA_TEXT, String.format(getString(R.string.email_intent_extra_data), productName));
+        if(contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(contactSupplierIntent);
+        }
+    }
+
+    private void orderProductBySupplierPhone(String phoneNumber) {
+        Intent contactSupplierIntent = new Intent();
+        contactSupplierIntent.setAction(Intent.ACTION_DIAL);
+        contactSupplierIntent.setData(Uri.parse(String.format(getString(R.string.phone_number_intent_data), phoneNumber)));
+        if (contactSupplierIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(contactSupplierIntent);
+        }
     }
 
     private void deletePet() {
@@ -281,10 +311,10 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
     private boolean checkIfValueSet(EditText text, String description) {
         if(TextUtils.isEmpty(text.getText())) {
             text.setError(String.format(getString(R.string.missing_field_for_product), description));
-            return false;
+            return true;
         } else {
             text.setError(null);
-            return true;
+            return false;
         }
     }
 
@@ -298,11 +328,12 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         String productQuantityString = mProductQuantityEditText.getText().toString().trim();
         String productSupplierName = mSupplierNameEditText.getText().toString().trim();
         String productSupplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
+        String productSupplierEmail = mSupplierEmailEditText.getText().toString().trim();
 
-        if (!checkIfValueSet(mProductNameEditText, StoreEntry.COLUMN_PRODUCT_NAME)) {
+        if (checkIfValueSet(mProductNameEditText, StoreEntry.COLUMN_PRODUCT_NAME)) {
             isFilled = false;
         }
-        if (!checkIfValueSet(mProductPriceEditText, StoreEntry.COLUMN_PRODUCT_PRICE)) {
+        if (checkIfValueSet(mProductPriceEditText, StoreEntry.COLUMN_PRODUCT_PRICE)) {
             isFilled = false;
         } else {
             productPrice = Integer.parseInt(productPriceString);
@@ -314,10 +345,20 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         if (TextUtils.isEmpty(productQuantityString)) {
             productQuantityString = getString(R.string.zero);
         }
-        if (!checkIfValueSet(mSupplierNameEditText, StoreEntry.COLUMN_SUPPLIER_NAME)) {
+        if (checkIfValueSet(mSupplierNameEditText, StoreEntry.COLUMN_SUPPLIER_NAME)) {
             isFilled = false;
         }
-        if (!checkIfValueSet(mSupplierPhoneNumberEditText, StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
+        if (checkIfValueSet(mSupplierPhoneNumberEditText, StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
+            isFilled = false;
+        }
+
+        if(checkIfValueSet(mSupplierEmailEditText, StoreEntry.COLUMN_SUPPLIER_EMAIL)) {
+            isFilled = false;
+        } else if(!productSupplierEmail.contains(getString(R.string.monkey))) {
+            mSupplierEmailEditText.setError(getString(R.string.missing_sign_in_email));
+            isFilled = false;
+        } else if(!productSupplierEmail.contains(getString(R.string.dot))) {
+            mSupplierEmailEditText.setError(getString(R.string.missing_sign_2_in_email));
             isFilled = false;
         }
 
@@ -334,6 +375,7 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
         values.put(StoreEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(StoreEntry.COLUMN_SUPPLIER_NAME, productSupplierName);
         values.put(StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER, productSupplierPhoneNumber);
+        values.put(StoreEntry.COLUMN_SUPPLIER_EMAIL, productSupplierEmail);
 
         if (mCurrentProductUri == null) {
             Uri newUri = getContentResolver().insert(StoreEntry.CONTENT_URI, values);
