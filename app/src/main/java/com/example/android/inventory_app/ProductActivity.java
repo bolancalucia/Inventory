@@ -332,7 +332,11 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
 
         if (checkIfValueSet(mProductNameEditText, StoreEntry.COLUMN_PRODUCT_NAME)) {
             isFilled = false;
+        } else if (!productNameString.matches(getString(R.string.regex_for_name))) {
+            mProductNameEditText.setError(getString(R.string.name_has_incorrect_signs));
+            isFilled = false;
         }
+
         if (checkIfValueSet(mProductPriceEditText, StoreEntry.COLUMN_PRODUCT_PRICE)) {
             isFilled = false;
         } else {
@@ -342,12 +346,18 @@ public class ProductActivity extends AppCompatActivity implements LoaderManager.
                 isFilled = false;
             }
         }
+
         if (TextUtils.isEmpty(productQuantityString)) {
             productQuantityString = getString(R.string.zero);
         }
+
         if (checkIfValueSet(mSupplierNameEditText, StoreEntry.COLUMN_SUPPLIER_NAME)) {
             isFilled = false;
+        } else if (!productSupplierName.matches(getString(R.string.regex_for_name))) {
+            mSupplierNameEditText.setError(getString(R.string.name_has_incorrect_signs));
+            isFilled = false;
         }
+
         if (checkIfValueSet(mSupplierPhoneNumberEditText, StoreEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
             isFilled = false;
         }

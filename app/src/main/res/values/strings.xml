@@ -69,5 +69,7 @@
     <string name="missing_sign_2_in_email">Email misses . sign</string>
     <string name="mail_intent_data">mailto:%s</string>
     <string name="email_intent_extra_data">We need more %s. It is out of stock!  Hurry with shipping please.</string>
+    <string name="name_has_incorrect_signs">Incorrect signs are entered</string>
+    <string name="regex_for_name">^[a-zA-Z0-9_]+$</string>
 
 </resources>
