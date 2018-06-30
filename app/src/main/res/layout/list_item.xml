@@ -7,6 +7,15 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:paddingRight="8dp"
+        android:paddingEnd="8dp"
+        android:contentDescription="@string/product_image"
+        android:src="@drawable/box"/>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -18,19 +27,22 @@
             android:id="@+id/name"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#2B3D4D"
+            android:hint="@string/dummy_name"
             style="@style/List_view_text_views"/>
 
         <TextView
             android:id="@+id/price"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#AEB6BD"
-            style="@style/List_view_text_views"/>
+            style="@style/List_view_text_views"
+            android:hint="@string/dummy_price"/>
 
         <TextView
             android:id="@+id/quantity"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#AEB6BD"
-            style="@style/List_view_text_views" />
+            style="@style/List_view_text_views"
+            android:hint="@string/dummy_quantity"/>
     </LinearLayout>
 
     <ImageButton
