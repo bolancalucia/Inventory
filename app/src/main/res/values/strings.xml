@@ -71,6 +71,4 @@
     <string name="email_intent_extra_data">We need more %s. It is out of stock!  Hurry with shipping please.</string>
     <string name="name_has_incorrect_signs">Incorrect signs are entered</string>
     <string name="regex_for_name">^[a-zA-Z0-9_]+$</string>
-    <string name="product_image">Product image</string>
-
 </resources>
